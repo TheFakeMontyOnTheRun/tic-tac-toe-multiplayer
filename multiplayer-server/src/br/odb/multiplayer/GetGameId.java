@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import br.odb.multiplayer.model.Game;
 import br.odb.multiplayer.model.Player;
 import br.odb.multiplayer.model.ServerContext;
+import br.odb.multiplayer.model.tictactoe.TicTacToeGame;
 
 /**
  * Servlet implementation class FindGame
@@ -59,14 +60,13 @@ public class GetGameId extends HttpServlet {
 		}		
 		
 		//create new game
-		Game g = new Game( bigger + 1 );
+		Game g = new TicTacToeGame( bigger + 1 );
 		context.games.put( g.id, g );
 		
 		response.getOutputStream().write( (byte)g.id );
 		g.players.add( new Player( g.id, g.players.size() + 1, g.players.size() + 1, "" ) );
 		playerId = g.players.size();// + 1;
 		response.getOutputStream().write( (byte)playerId );
-//		response.getOutputStream().write( (byte) playerId + 1 );		
 		response.getOutputStream().write( (byte)playerId );
 	}
 

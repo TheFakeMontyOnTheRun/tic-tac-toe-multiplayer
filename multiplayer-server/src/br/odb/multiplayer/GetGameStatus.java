@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import br.odb.multiplayer.model.Game;
 import br.odb.multiplayer.model.ServerContext;
+import br.odb.multiplayer.model.tictactoe.TicTacToeGame;
 
 /**
  * Servlet implementation class CheckGameStatus
@@ -38,17 +39,7 @@ public class GetGameStatus extends HttpServlet {
 		
 		Writer writer = response.getWriter();
 		Game g = context.games.get( Integer.parseInt( request.getParameter( "gameId" ) ) );
-		
-		for ( int c = 0; c < 3; ++c ) {
-			for ( int d = 0; d < 3; ++d ) {
-				writer.write( g.table[ c ][ d ] );
-			}
-		}
-		
-		writer.write( g.players.get( g.currentTeam ).teamId );
-		
-		writer.write( g.winnerTeam );
-		
+		g.writeState( writer );
 		writer.flush();		
 	}
 
