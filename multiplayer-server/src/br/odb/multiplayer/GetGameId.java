@@ -19,6 +19,30 @@ import br.odb.multiplayer.model.tictactoe.TicTacToeGame;
  */
 @WebServlet("/GetGameId")
 public class GetGameId extends HttpServlet {
+	
+	
+	class GameIdResponse {
+		private int id;
+		private int playerId;
+		private int teamId;
+
+		@Override
+		public String toString() {
+			
+			StringBuilder sb = new StringBuilder();
+			
+			sb.append( "<?xml version='1.0'?>\n<game><gameId>" );
+			sb.append( id );
+			sb.append( "</gameId><playerId>" );
+			sb.append( playerId );
+			sb.append( "</playerId><teamId>" );
+			sb.append( teamId );		
+			sb.append( "</teamId></game>" );
+			
+			return sb.toString();
+		}
+	}
+	
 	private static final long serialVersionUID = 1L;
        
     /**
@@ -26,48 +50,49 @@ public class GetGameId extends HttpServlet {
      */
     public GetGameId() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		ServerContext context = ServerContext
 				.createOrRetrieve(  (ServletContext) getServletContext() );
+				
+		int playerId;
+		GameIdResponse gis = new GameIdResponse();
+		Game g = getGameNewOrVacantGame( context );
+		
+		playerId = g.addNewPlayer();
+
+		gis.id = g.id;
+		gis.playerId = playerId;
+		gis.teamId = playerId;
+		
+		response.getOutputStream().write( gis.toString().getBytes() );
+
+	}
+
+	private Game getGameNewOrVacantGame( ServerContext context ) {
 		
 		int bigger = 0;
-		int playerId;
-		
+		Game toReturn;
 		//find a existing game pending for new players
 		for ( Game g : context.games.values() ) {
-			if ( g.players.size() < 2 ) {
-
-				response.getOutputStream().write( (byte)g.id );
-				g.players.add( new Player( g.id, g.players.size() + 1, g.players.size() + 1, "" ) );
-				playerId = g.players.size();// + 1;
-				response.getOutputStream().write( (byte)playerId );
-//				response.getOutputStream().write( (byte) playerId + 1 );		
-				response.getOutputStream().write( (byte)playerId );		
-
-				
-				return;
+			if ( g.players.size() < 2 ) {				
+				return g;
 			}
 			
 			if ( g.id > bigger ) {
 				bigger = g.id;
 			}
-		}		
+		}
 		
-		//create new game
-		Game g = new TicTacToeGame( bigger + 1 );
-		context.games.put( g.id, g );
+		toReturn = new TicTacToeGame( bigger + 1 );
+		context.games.put( toReturn.id, toReturn );
 		
-		response.getOutputStream().write( (byte)g.id );
-		g.players.add( new Player( g.id, g.players.size() + 1, g.players.size() + 1, "" ) );
-		playerId = g.players.size();// + 1;
-		response.getOutputStream().write( (byte)playerId );
-		response.getOutputStream().write( (byte)playerId );
+		return toReturn;
 	}
 
 	/**

@@ -18,6 +18,13 @@ public abstract class Game {
 		this.currentTeam = 0;
 		this.winnerTeam = 0;
 	}
+	
+	public int addNewPlayer() {
+		
+		players.add( new Player( id, players.size() + 1, players.size() + 1, "" ) );
+		
+		return players.size();
+	}
 
 	public abstract void checkForGameEnd() ;
 

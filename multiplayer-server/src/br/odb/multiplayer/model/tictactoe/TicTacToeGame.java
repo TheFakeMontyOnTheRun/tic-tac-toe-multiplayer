@@ -59,16 +59,25 @@ public class TicTacToeGame extends Game {
 	}
 
 	public void writeState(Writer writer) {
+		
+		StringBuilder sb = new StringBuilder( "<?xml version='1.0'?><game><state>" );
+		
+		
 		try {
 			for (int c = 0; c < 3; ++c) {
 				for (int d = 0; d < 3; ++d) {
-					writer.write(table[c][d]);
+					sb.append(table[c][d]);
 				}
 			}
 
-			writer.write(players.get(currentTeam).teamId);
+			sb.append( "</state><current>" );
+			
+			sb.append(players.get(currentTeam).teamId);
+			sb.append( "</current><winner>" );
+			sb.append(winnerTeam);
+			sb.append( "</winner></game>" );
 
-			writer.write(winnerTeam);
+			writer.write( sb.toString() );
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

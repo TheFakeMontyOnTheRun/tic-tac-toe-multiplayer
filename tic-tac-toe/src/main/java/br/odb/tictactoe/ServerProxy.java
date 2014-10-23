@@ -3,12 +3,24 @@
  */
 package br.odb.tictactoe;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import br.odb.tictactoe.TicTacToeMainApp.Piece;
 
 /**
  * @author monty
@@ -40,27 +52,63 @@ public class ServerProxy {
 		return toReturn;
 	}
 	
+	
+	public Node getGameNodeFromURL( String url ) throws ParserConfigurationException, SAXException, IOException {
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		DocumentBuilder db = dbf.newDocumentBuilder();
+		Document doc = db.parse( url );
+		doc.getDocumentElement().normalize();
+
+		NodeList nodeLst;
+		nodeLst = doc.getElementsByTagName("game");
+		return nodeLst.item(0);
+	}
+	
+	public Node getGameNode( InputStream is ) throws ParserConfigurationException, SAXException, IOException {
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		DocumentBuilder db = dbf.newDocumentBuilder();
+		Document doc = db.parse( is );
+		doc.getDocumentElement().normalize();
+
+		NodeList nodeLst;
+		nodeLst = doc.getElementsByTagName("game");
+		return nodeLst.item(0);
+	}
+	
 
 	public void startConnection(MultiplayerClient client) {
 		try {
 			
-			int gameId;
-			int playerId;
-			int teamId;
-			
-			byte[] response = requestDirectly( getGameId() );
-			
-			gameId = ( int) response[ 0 ];
-			client.receiveGameId(gameId);
-			 
-			playerId = ( int ) response[ 1 ];
-			client.receivePlayerId(playerId);
-			
-			teamId = ( int ) response[ 2 ];
-			client.receiveTeamId(teamId);
+			Node gameNode;
+			gameNode = getGameNodeFromURL( getGameId() );
+
+			NodeList nodeLst = gameNode.getChildNodes();
+
+			for (int s = 0; s < nodeLst.getLength(); s++) {
+
+				Node fstNode = nodeLst.item(s);
+
+				if (fstNode != null) {
+
+					if (fstNode.getNodeType() == Node.ELEMENT_NODE) {
+
+						if (fstNode.getNodeName().equals("gameId")) {
+							client.receiveGameId( Integer.parseInt( fstNode.getTextContent() ) );
+						} else if (fstNode.getNodeName().equals("playerId")) {
+							client.receivePlayerId( Integer.parseInt( fstNode.getTextContent() ) );
+						} else if (fstNode.getNodeName().equals("teamId")) {
+							client.receiveTeamId( Integer.parseInt( fstNode.getTextContent() ) );
+						}
+					}
+				}
+			}			
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
+		} catch (SAXException e) {
 			e.printStackTrace();
 		}
 
@@ -98,22 +146,11 @@ public class ServerProxy {
 		return readFully(response, "utf8");
 	}
 
-	private byte[] requestDirectly(String url) throws MalformedURLException,
-			IOException {
-
-		System.out.println("url: " + url);
-
-		URLConnection connection = new URL(url).openConnection();
-		connection.setRequestProperty("Accept-Charset", "utf8");
-		InputStream response = connection.getInputStream();
-
-		return readFully(response );
-	}
 
 	public void requestUpdate(MultiplayerClient client) {
 		try {
-			client.receiveMove( requestDirectly( getGameStatus( client.getAppId() ) ) );
-		} catch (IOException e) {
+			client.receiveMove( getGameNodeFromURL( getGameStatus( client.getAppId() ) ) );
+		} catch ( Exception e) {
 			e.printStackTrace();
 		}
 	}
