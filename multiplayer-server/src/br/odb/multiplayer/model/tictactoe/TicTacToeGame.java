@@ -83,4 +83,9 @@ public class TicTacToeGame extends Game {
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public int getNumberOfRequiredPlayers() {
+		return 2;
+	}
 }

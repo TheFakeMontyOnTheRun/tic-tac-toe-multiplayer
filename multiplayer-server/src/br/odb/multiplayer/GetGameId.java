@@ -51,7 +51,7 @@ public class GetGameId extends HttpServlet {
     public GetGameId() {
         super();
     }
-
+    
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -61,6 +61,7 @@ public class GetGameId extends HttpServlet {
 				.createOrRetrieve(  (ServletContext) getServletContext() );
 				
 		int playerId;
+		
 		GameIdResponse gis = new GameIdResponse();
 		Game g = getGameNewOrVacantGame( context );
 		
@@ -77,10 +78,11 @@ public class GetGameId extends HttpServlet {
 	private Game getGameNewOrVacantGame( ServerContext context ) {
 		
 		int bigger = 0;
+		
 		Game toReturn;
 		//find a existing game pending for new players
 		for ( Game g : context.games.values() ) {
-			if ( g.players.size() < 2 ) {				
+			if ( g.players.size() < g.getNumberOfRequiredPlayers() && !g.isTooOld() ) {				
 				return g;
 			}
 			

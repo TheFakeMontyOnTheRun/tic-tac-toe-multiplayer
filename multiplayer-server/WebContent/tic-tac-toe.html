@@ -7,6 +7,7 @@ div {
 	height: 100px;
 	background-color: #111;
 	border-color: #00F;
+	color: #FFF;
 }
 </style>
 <meta charset="UTF-8">
@@ -53,6 +54,13 @@ div {
 		</tr>
 
 	</table>
+	<ul>
+
+		<li id='gameIdContainer'></li>
+		<li id='playerIdContainer'></li>
+		<li id='turnIdContainer'></li>
+	</ul>
+
 	<script>
 		var winnerId;
 		var currentId;
@@ -60,6 +68,8 @@ div {
 		var gameId;
 		var playerId;
 		var teamId;
+		var timer;
+		var playing;
 
 		function getTeamColor(teamId) {
 			if (teamId == '0') {
@@ -83,15 +93,20 @@ div {
 						+ playerId
 						+ "&x="
 						+ slot.id.charAt(0) + "&y=" + slot.id.charAt(1));
+			} else {
+				alert("Not your turn!");
 			}
 
 			updateGameStatus(gameId);
 		}
 
 		function updateGameStatus(gameId) {
+
 			var gameStatusResponse = makeRequest("http://localhost:8080/multiplayer-server/GetGameStatus?gameId="
 					+ gameId);
+
 			var gameTable = (gameStatusResponse.getElementsByTagName("state")[0].innerHTML);
+
 			currentId = gameStatusResponse.getElementsByTagName("current")[0].innerHTML;
 			winnerId = gameStatusResponse.getElementsByTagName("winner")[0].innerHTML;
 
@@ -113,6 +128,15 @@ div {
 					.charAt(7));
 			document.getElementById('22').style.backgroundColor = getTeamColor(gameTable
 					.charAt(8));
+
+			document.getElementById('turnIdContainer').innerHTML = "Currently playing "
+					+ currentId;
+
+			if (winnerId != 0) {
+				playing = false;
+				alert("Player " + winnerId + " wins!");
+				clearInterval(timer);
+			}
 		}
 
 		function makeRequestVoid(url) {
@@ -135,19 +159,24 @@ div {
 			return xmlDoc;
 		}
 
-		function send(element) {
-			var gameResponse = makeRequest("http://localhost:8080/multiplayer-server/GetGameId");
-			alert(gameResponse.getElementsByTagName("gameId")[0].innerHTML);
-		}
-
 		newGameResponse = makeRequest("http://localhost:8080/multiplayer-server/GetGameId");
 		gameId = (newGameResponse.getElementsByTagName("gameId")[0].innerHTML);
 		playerId = (newGameResponse.getElementsByTagName("playerId")[0].innerHTML);
 		teamId = (newGameResponse.getElementsByTagName("teamId")[0].innerHTML);
-
 		updateGameStatus(gameId);
-		setInterval(function() {
-			updateGameStatus(gameId)
+
+		document.getElementById('gameIdContainer').innerHTML = "Game " + gameId;
+		document.getElementById('playerIdContainer').innerHTML = "Player "
+				+ playerId;
+		document.getElementById('turnIdContainer').innerHTML = "Currently playing "
+				+ currentId;
+
+		playing = true;
+		timer = setInterval(function() {
+			if (playing) {
+
+				updateGameStatus(gameId);
+			}
 		}, 1000);
 	</script>
 </body>
