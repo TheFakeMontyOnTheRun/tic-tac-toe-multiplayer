@@ -36,7 +36,7 @@ public class ServerProxy {
 
 	public String getGameId() {
 
-		return address + "/GetGameId";
+		return address + "/GetGameId?gameType=1";
 	}
 
 	private String getGameStatus(int gameId) {

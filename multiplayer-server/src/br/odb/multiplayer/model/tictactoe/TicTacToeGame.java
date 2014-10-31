@@ -53,6 +53,11 @@ public class TicTacToeGame extends Game {
 
 		int decodedX = Integer.parseInt(x);
 		int decodedY = Integer.parseInt(y);
+		int teamId = Integer.parseInt(params.get("playerId"));
+		
+//		if ( teamId != currentTeam ) {
+//			return;
+//		}
 
 		table[decodedY][decodedX] = Integer.parseInt(params.get("playerId"));
 		currentTeam = (currentTeam + 1) % players.size();

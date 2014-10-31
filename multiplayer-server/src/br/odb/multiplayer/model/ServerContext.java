@@ -4,8 +4,14 @@ import java.util.HashMap;
 
 import javax.servlet.ServletContext;
 
+import br.odb.multiplayer.model.tictactoe.TicTacToeGame;
+
 public class ServerContext {
 	public final HashMap<Integer, Game> games = new HashMap<Integer, Game>();
+	public final HashMap< String, Game > gameBuilders = new HashMap< String, Game >(); 
+	
+	public ServerContext() {
+	}
 
 	public static ServerContext createOrRetrieve( ServletContext servletContext) {
 

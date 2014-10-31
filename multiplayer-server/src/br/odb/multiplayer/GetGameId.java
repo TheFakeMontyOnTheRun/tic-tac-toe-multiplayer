@@ -1,6 +1,7 @@
 package br.odb.multiplayer;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -13,13 +14,13 @@ import br.odb.multiplayer.model.Game;
 import br.odb.multiplayer.model.Player;
 import br.odb.multiplayer.model.ServerContext;
 import br.odb.multiplayer.model.tictactoe.TicTacToeGame;
+import br.odb.multiplayer.spacedames.SpaceDamesGame;
 
 /**
  * Servlet implementation class FindGame
  */
 @WebServlet("/GetGameId")
 public class GetGameId extends HttpServlet {
-	
 	
 	class GameIdResponse {
 		private int id;
@@ -61,9 +62,9 @@ public class GetGameId extends HttpServlet {
 				.createOrRetrieve(  (ServletContext) getServletContext() );
 				
 		int playerId;
-		
+		int gameType = Integer.parseInt( request.getParameter( "gameType" ) );
 		GameIdResponse gis = new GameIdResponse();
-		Game g = getGameNewOrVacantGame( context );
+		Game g = getGameNewOrVacantGame( context, gameType );
 		
 		playerId = g.addNewPlayer();
 
@@ -75,7 +76,7 @@ public class GetGameId extends HttpServlet {
 
 	}
 
-	private Game getGameNewOrVacantGame( ServerContext context ) {
+	private Game getGameNewOrVacantGame( ServerContext context, int gameType ) {
 		
 		int bigger = 0;
 		
@@ -91,7 +92,12 @@ public class GetGameId extends HttpServlet {
 			}
 		}
 		
-		toReturn = new TicTacToeGame( bigger + 1 );
+		if ( gameType == 1 ) {
+			toReturn = new TicTacToeGame( bigger + 1 );
+		} else {
+			toReturn = new SpaceDamesGame( bigger + 1 );
+		}
+			
 		context.games.put( toReturn.id, toReturn );
 		
 		return toReturn;

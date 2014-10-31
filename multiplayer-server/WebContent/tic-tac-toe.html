@@ -104,6 +104,10 @@ div {
 
 			var gameStatusResponse = makeRequest("http://localhost:8080/multiplayer-server/GetGameStatus?gameId="
 					+ gameId);
+			
+			if ( gameStatusResponse == null ) {
+				return;
+			}
 
 			var gameTable = (gameStatusResponse.getElementsByTagName("state")[0].innerHTML);
 
@@ -152,14 +156,19 @@ div {
 			request.open("GET", url, false);
 			request.send();
 
-			var parser = new DOMParser();
-			var xmlDoc = parser.parseFromString(request.responseText,
-					"text/xml");
-
-			return xmlDoc;
+			if ( request.responseText ) {
+				
+				var parser = new DOMParser();
+				var xmlDoc = parser.parseFromString(request.responseText,
+						"text/xml");
+	
+				return xmlDoc;
+			} else {
+				return null;
+			}			
 		}
 
-		newGameResponse = makeRequest("http://localhost:8080/multiplayer-server/GetGameId");
+		newGameResponse = makeRequest("http://localhost:8080/multiplayer-server/GetGameId?gameType=1");
 		gameId = (newGameResponse.getElementsByTagName("gameId")[0].innerHTML);
 		playerId = (newGameResponse.getElementsByTagName("playerId")[0].innerHTML);
 		teamId = (newGameResponse.getElementsByTagName("teamId")[0].innerHTML);
