@@ -1,7 +1,6 @@
 package br.odb.multiplayer;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -11,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.odb.multiplayer.model.Game;
-import br.odb.multiplayer.model.Player;
 import br.odb.multiplayer.model.ServerContext;
 import br.odb.multiplayer.model.tictactoe.TicTacToeGame;
 import br.odb.multiplayer.spacedames.SpaceDamesGame;
