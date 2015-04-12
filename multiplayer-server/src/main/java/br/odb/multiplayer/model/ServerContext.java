@@ -18,6 +18,8 @@ public class ServerContext {
 
 		if (context == null) {
 			reset( servletContext );
+			
+			context = (ServerContext) servletContext.getAttribute("games-context");
 		}
 
 		return context;
