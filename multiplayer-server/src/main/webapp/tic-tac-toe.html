@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+div {
+	width: 100px;
+	height: 100px;
+	background-color: #111;
+	border-color: #00F;
+	color: #FFF;
+}
+</style>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+	Game:
+	<table>
+		<tr>
+			<td>
+				<div onclick="clickSlot( this );" class='slot' id='00'></div>
+			</td>
+			<td>
+				<div onclick="clickSlot( this );" class='slot' id='10'></div>
+			</td>
+			<td>
+				<div onclick="clickSlot( this );" class='slot' id='20'></div>
+			</td>
+		</tr>
+
+		<tr>
+			<td>
+				<div onclick="clickSlot( this );" class='slot' id='01'></div>
+			</td>
+			<td>
+				<div onclick="clickSlot( this );" class='slot' id='11'></div>
+			</td>
+			<td>
+				<div onclick="clickSlot( this );" class='slot' id='21'></div>
+			</td>
+		</tr>
+
+		<tr>
+			<td>
+				<div onclick="clickSlot( this );" class='slot' id='02'></div>
+			</td>
+			<td>
+				<div onclick="clickSlot( this );" class='slot' id='12'></div>
+			</td>
+			<td>
+				<div onclick="clickSlot( this );" class='slot' id='22'></div>
+			</td>
+		</tr>
+
+	</table>
+	<ul>
+
+		<li id='gameIdContainer'></li>
+		<li id='playerIdContainer'></li>
+		<li id='turnIdContainer'></li>
+	</ul>
+
+	<script>
+		var winnerId;
+		var currentId;
+		var newGameResponse;
+		var gameId;
+		var playerId;
+		var teamId;
+		var timer;
+		var playing;
+
+		function getTeamColor(teamId) {
+			if (teamId == '0') {
+				return "#111";
+			}
+
+			if (teamId == '1') {
+				return "#F00";
+			}
+
+			return "#0F0";
+		}
+
+		function clickSlot(slot) {
+
+			if (currentId == teamId) {
+
+				makeRequestVoid("http://localhost:8080/multiplayer-server/SendMove?gameId="
+						+ gameId
+						+ "&playerId="
+						+ playerId
+						+ "&x="
+						+ slot.id.charAt(0) + "&y=" + slot.id.charAt(1));
+			} else {
+				alert("Not your turn!");
+			}
+
+			updateGameStatus(gameId);
+		}
+
+		function updateGameStatus(gameId) {
+
+			var gameStatusResponse = makeRequest("http://localhost:8080/multiplayer-server/GetGameStatus?gameId="
+					+ gameId);
+			
+			if ( gameStatusResponse == null ) {
+				return;
+			}
+
+			var gameTable = (gameStatusResponse.getElementsByTagName("state")[0].innerHTML);
+
+			currentId = gameStatusResponse.getElementsByTagName("current")[0].innerHTML;
+			winnerId = gameStatusResponse.getElementsByTagName("winner")[0].innerHTML;
+
+			document.getElementById('00').style.backgroundColor = getTeamColor(gameTable
+					.charAt(0));
+			document.getElementById('10').style.backgroundColor = getTeamColor(gameTable
+					.charAt(1));
+			document.getElementById('20').style.backgroundColor = getTeamColor(gameTable
+					.charAt(2));
+			document.getElementById('01').style.backgroundColor = getTeamColor(gameTable
+					.charAt(3));
+			document.getElementById('11').style.backgroundColor = getTeamColor(gameTable
+					.charAt(4));
+			document.getElementById('21').style.backgroundColor = getTeamColor(gameTable
+					.charAt(5));
+			document.getElementById('02').style.backgroundColor = getTeamColor(gameTable
+					.charAt(6));
+			document.getElementById('12').style.backgroundColor = getTeamColor(gameTable
+					.charAt(7));
+			document.getElementById('22').style.backgroundColor = getTeamColor(gameTable
+					.charAt(8));
+
+			document.getElementById('turnIdContainer').innerHTML = "Currently playing "
+					+ currentId;
+
+			if (winnerId != 0) {
+				playing = false;
+				alert("Player " + winnerId + " wins!");
+				clearInterval(timer);
+			}
+		}
+
+		function makeRequestVoid(url) {
+
+			var request = new XMLHttpRequest();
+			request.open("GET", url, false);
+			request.send();
+		}
+
+		function makeRequest(url) {
+
+			var request = new XMLHttpRequest();
+			request.open("GET", url, false);
+			request.send();
+
+			if ( request.responseText ) {
+				
+				var parser = new DOMParser();
+				var xmlDoc = parser.parseFromString(request.responseText,
+						"text/xml");
+	
+				return xmlDoc;
+			} else {
+				return null;
+			}			
+		}
+
+		newGameResponse = makeRequest("http://localhost:8080/multiplayer-server/GetGameId?gameType=1");
+		gameId = (newGameResponse.getElementsByTagName("gameId")[0].innerHTML);
+		playerId = (newGameResponse.getElementsByTagName("playerId")[0].innerHTML);
+		teamId = (newGameResponse.getElementsByTagName("teamId")[0].innerHTML);
+		updateGameStatus(gameId);
+
+		document.getElementById('gameIdContainer').innerHTML = "Game " + gameId;
+		document.getElementById('playerIdContainer').innerHTML = "Player "
+				+ playerId;
+		document.getElementById('turnIdContainer').innerHTML = "Currently playing "
+				+ currentId;
+
+		playing = true;
+		timer = setInterval(function() {
+			if (playing) {
+
+				updateGameStatus(gameId);
+			}
+		}, 1000);
+	</script>
+</body>
+</html>
