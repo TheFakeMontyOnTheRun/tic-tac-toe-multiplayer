@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import br.odb.fpsdemo.FPSDemoGame;
 import br.odb.multiplayer.model.Game;
 import br.odb.multiplayer.model.ServerContext;
+import br.odb.multiplayer.model.spacedames.SpaceDamesGame;
 import br.odb.multiplayer.model.tictactoe.TicTacToeGame;
 
 /**
@@ -96,6 +97,8 @@ public class GetGameId extends HttpServlet {
 
 		if (gameType == 1) {
 			toReturn = new TicTacToeGame(bigger + 1);
+		} else if (gameType == 2) {
+			toReturn = new SpaceDamesGame(bigger + 1);
 		} else {
 			toReturn = new FPSDemoGame(bigger + 1);
 		}
