@@ -12,7 +12,7 @@ public class SpaceDamesGame extends Game {
 	GameBoard board = new GameBoard();
 	
 	public SpaceDamesGame(int gameId) {
-		super(gameId);
+		super(gameId, 2);
 	}
 
 	@Override

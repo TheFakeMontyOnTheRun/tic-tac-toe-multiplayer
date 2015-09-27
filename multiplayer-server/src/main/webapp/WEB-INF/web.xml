@@ -5,7 +5,7 @@
 <web-app>
 	<display-name>Multiplayer</display-name>
 
-
+<!-- ================= -->
 	<servlet>
 		<servlet-name>GetGameId</servlet-name>
 		<display-name>GetGameId</display-name>
@@ -21,8 +21,27 @@
 			/GetGameId
 		</url-pattern>
 	</servlet-mapping>
-
-
+<!-- ================= -->
+	<servlet>
+		<servlet-name>GetJavaGameId</servlet-name>
+		<display-name>GetJavaGameId</display-name>
+		<description></description>
+		
+		<servlet-class>
+			br.odb.multiplayer.GetJavaGameId
+		</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>
+			GetJavaGameId
+		</servlet-name>
+		<url-pattern>
+			/GetJavaGameId
+		</url-pattern>
+	</servlet-mapping>
+<!-- ================= -->
+	
 	<servlet>
 		<servlet-name>GetGameStatus</servlet-name>
 		<servlet-class>
@@ -38,8 +57,7 @@
 			/GetGameStatus
 		</url-pattern>
 	</servlet-mapping>
-
-
+<!-- ================= -->
 	<servlet>
 		<servlet-name>ResetServer</servlet-name>
 		<servlet-class>
@@ -56,7 +74,7 @@
 		</url-pattern>
 	</servlet-mapping>
 
-
+<!-- ================= -->
 	<servlet>
 		<servlet-name>SendMove</servlet-name>
 		<servlet-class>
@@ -72,4 +90,5 @@
 			/SendMove
 		</url-pattern>
 	</servlet-mapping>
+<!-- ================= -->	
 </web-app>

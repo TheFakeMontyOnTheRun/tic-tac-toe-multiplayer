@@ -11,7 +11,7 @@ public class TicTacToeGame extends Game {
 	public final int[][] table = new int[3][];
 
 	public TicTacToeGame(int gameId) {
-		super(gameId);
+		super(gameId, 1);
 
 		for (int c = 0; c < 3; ++c) {
 			table[c] = new int[3];

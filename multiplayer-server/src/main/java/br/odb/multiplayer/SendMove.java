@@ -36,9 +36,10 @@ public class SendMove extends HttpServlet {
 
 		ServerContext context = ServerContext
 				.createOrRetrieve((ServletContext) getServletContext());
-
-		Game g = context.games.get(Integer.parseInt(request
-				.getParameter("gameId")));
+		
+		String parameter = request.getParameter("gameId");
+		int gameId = Integer.parseInt( parameter );
+		Game g = context.games.get( gameId );
 
 		if (g.winnerTeam != 0) {
 			return;

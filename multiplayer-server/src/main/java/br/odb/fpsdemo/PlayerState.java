@@ -12,12 +12,9 @@ public class PlayerState extends Player {
 	
 	public PlayerState(int id, int gameId, int teamId, String address) {
 		super(id, gameId, teamId, address);
-		
-		this.team = PlayerTeam.values()[ teamId ];
 	}
 	
-	public final Vec3 position = new Vec3();
-	public final PlayerTeam team;
+	public final Vec3 position = new Vec3();	
 	public float angleXZ;
 
 }

@@ -1,13 +1,12 @@
 package br.odb.multiplayer.model;
 
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public abstract class Game {
 	
-	public final ArrayList< Player > players = new ArrayList< Player >();
-	
+	public final HashMap< Integer, Player > players = new HashMap<>();
+	public final int type;
 	public final int id;
 	public int winnerTeam;
 	public int currentTeam;
@@ -15,8 +14,8 @@ public abstract class Game {
 	public long lastMoveTime;
 	public static final long TIME_LIMIT = 2 * 60 * 1000;
 	
-	public Game( int gameId ) {
-		
+	public Game( int gameId, int gameType ) {
+		this.type = gameType;
 		this.id = gameId;
 		this.currentTeam = 0;
 		this.winnerTeam = 0;
@@ -25,7 +24,9 @@ public abstract class Game {
 	
 	public int addNewPlayer() {
 		lastMoveTime = System.currentTimeMillis();
-		players.add( makeNewPlayer() );
+		Player player = makeNewPlayer(); 
+		players.put( player.playerId, player );
+		System.out.println( "player added" );
 		
 		return players.size();
 	}
