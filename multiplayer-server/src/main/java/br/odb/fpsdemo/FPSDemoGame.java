@@ -12,6 +12,7 @@ import java.util.List;
 
 import br.odb.multiplayer.model.Game;
 import br.odb.multiplayer.model.Player;
+import br.odb.vintage.dto.BeamStateDTO;
 import br.odb.vintage.dto.FPSGameStatusDTO;
 import br.odb.vintage.dto.PlayerStateDTO;
 
