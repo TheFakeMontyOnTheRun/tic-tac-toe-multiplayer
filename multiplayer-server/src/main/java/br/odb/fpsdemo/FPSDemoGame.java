@@ -54,7 +54,7 @@ public class FPSDemoGame extends Game {
 			
 			rawStates = playerStates.toArray( new PlayerStateDTO[0] );
 			
-			oos.writeObject( new FPSGameStatusDTO(  rawStates ) );
+			oos.writeObject( new FPSGameStatusDTO(  rawStates, new BeamStateDTO[]{} ) );
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
