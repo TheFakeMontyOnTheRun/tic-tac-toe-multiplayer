@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.util.HashMap;
 
 import br.odb.multiplayer.model.Game;
+import br.odb.multiplayer.model.Player;
 
 public class TicTacToeGame extends Game {
 
@@ -24,23 +25,23 @@ public class TicTacToeGame extends Game {
 		for (int c = 0; c < 3; ++c) {
 
 			if (table[c][0] == table[c][1] && table[c][2] == table[c][1]) {
-				winnerTeam = table[c][0];
+				winnerPlayerId = table[c][0];
 				return;
 			}
 
 			if (table[0][c] == table[1][c] && table[2][c] == table[1][c]) {
-				winnerTeam = table[0][c];
+				winnerPlayerId = table[0][c];
 				return;
 			}
 		}
 
 		if (table[0][0] == table[1][1] && table[2][2] == table[1][1]) {
-			winnerTeam = table[0][0];
+			winnerPlayerId = table[0][0];
 			return;
 		}
 
 		if (table[0][2] == table[1][1] && table[2][0] == table[1][1]) {
-			winnerTeam = table[0][2];
+			winnerPlayerId = table[0][2];
 			return;
 		}
 
@@ -53,14 +54,11 @@ public class TicTacToeGame extends Game {
 
 		int decodedX = Integer.parseInt(x);
 		int decodedY = Integer.parseInt(y);
-		int teamId = Integer.parseInt(params.get("playerId"));
-		
-//		if ( teamId != currentTeam ) {
-//			return;
-//		}
+		int playerId = Integer.parseInt(params.get("playerId"));
 
-		table[decodedY][decodedX] = teamId;
-		currentTeam = (currentTeam + 1) % players.size();
+		table[decodedY][decodedX] = playerId;
+		
+		setTheNextPlayerAsCurrent();
 	}
 
 	public void writeState(OutputStream os) {
@@ -73,14 +71,21 @@ public class TicTacToeGame extends Game {
 				for (int d = 0; d < 3; ++d) {
 					sb.append(table[c][d]);
 				}
-			}
-
-			sb.append( "</state><current>" );
+			}			
 			
-			sb.append(players.get(currentTeam).teamId);
-			sb.append( "</current><winner>" );
-			sb.append(winnerTeam);
-			sb.append( "</winner></game>" );
+			System.out.println( "writing status for " + currentPlayerId );
+			
+			Player p = players.get(currentPlayerId);
+			
+			if ( p != null ) {
+				sb.append( "</state><current>" );
+				sb.append(p.playerId);
+				sb.append( "</current><winner>" );
+				sb.append(winnerPlayerId);
+				sb.append( "</winner></game>" );
+			} else {
+				System.out.println( "current player is null!" );
+			}
 
 			os.write( sb.toString().getBytes() );
 		} catch (IOException e) {

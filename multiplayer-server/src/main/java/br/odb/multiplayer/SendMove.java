@@ -41,7 +41,7 @@ public class SendMove extends HttpServlet {
 		int gameId = Integer.parseInt( parameter );
 		Game g = context.games.get( gameId );
 
-		if (g.winnerTeam != 0) {
+		if (g.winnerPlayerId != 0) {
 			return;
 		}
 

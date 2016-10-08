@@ -22,25 +22,6 @@
 		</url-pattern>
 	</servlet-mapping>
 <!-- ================= -->
-	<servlet>
-		<servlet-name>GetJavaGameId</servlet-name>
-		<display-name>GetJavaGameId</display-name>
-		<description></description>
-		
-		<servlet-class>
-			br.odb.multiplayer.GetJavaGameId
-		</servlet-class>
-	</servlet>
-	
-	<servlet-mapping>
-		<servlet-name>
-			GetJavaGameId
-		</servlet-name>
-		<url-pattern>
-			/GetJavaGameId
-		</url-pattern>
-	</servlet-mapping>
-<!-- ================= -->
 	
 	<servlet>
 		<servlet-name>GetGameStatus</servlet-name>

@@ -9,23 +9,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import br.odb.fpsdemo.FPSDemoGame;
 import br.odb.multiplayer.model.Game;
 import br.odb.multiplayer.model.ServerContext;
-import br.odb.multiplayer.model.spacedames.SpaceDamesGame;
 import br.odb.multiplayer.model.tictactoe.TicTacToeGame;
 
 /**
  * Servlet implementation class FindGame
  */
 
-@WebServlet("/GetGameId")
 public class GetGameId extends HttpServlet {
 
 	class GameIdResponse {
-		private int id;
+		private int gameId;
 		private int playerId;
-		private int teamId;
 
 		@Override
 		public String toString() {
@@ -33,12 +29,10 @@ public class GetGameId extends HttpServlet {
 			StringBuilder sb = new StringBuilder();
 
 			sb.append("<?xml version='1.0'?>\n<game><gameId>");
-			sb.append(id);
+			sb.append(gameId);
 			sb.append("</gameId><playerId>");
 			sb.append(playerId);
-			sb.append("</playerId><teamId>");
-			sb.append(teamId);
-			sb.append("</teamId></game>");
+			sb.append("</playerId></game>");
 
 			return sb.toString();
 		}
@@ -59,6 +53,8 @@ public class GetGameId extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		
+		System.out.println( "GET GAME ID!" );
 
 		ServerContext context = ServerContext
 				.createOrRetrieve((ServletContext) getServletContext());
@@ -70,9 +66,8 @@ public class GetGameId extends HttpServlet {
 
 		playerId = g.addNewPlayer();
 
-		gis.id = g.id;
+		gis.gameId = g.gameId;
 		gis.playerId = playerId;
-		gis.teamId = playerId;
 
 		response.getOutputStream().write(gis.toString().getBytes());
 
@@ -87,23 +82,20 @@ public class GetGameId extends HttpServlet {
 		for (Game g : context.games.values()) {
 			if (g.players.size() < g.getNumberOfRequiredPlayers()
 					&& !g.isTooOld()) {
+				System.out.println( "player joining game with id " + ( g.gameId ) );
 				return g;
 			}
 
-			if (g.id > bigger) {
-				bigger = g.id;
+			if (g.gameId > bigger) {
+				bigger = g.gameId;
 			}
 		}
 
-		if (gameType == 1) {
-			toReturn = new TicTacToeGame(bigger + 1);
-		} else if (gameType == 2) {
-			toReturn = new SpaceDamesGame(bigger + 1);
-		} else {
-			toReturn = new FPSDemoGame(bigger + 1);
-		}
+		toReturn = new TicTacToeGame(bigger + 1);
 
-		context.games.put(toReturn.id, toReturn);
+		System.out.println( "created new game with id " + toReturn.gameId );
+		
+		context.games.put(toReturn.gameId, toReturn);
 
 		return toReturn;
 	}

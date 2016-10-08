@@ -60,6 +60,8 @@ div {
 		<li id='playerIdContainer'></li>
 		<li id='turnIdContainer'></li>
 	</ul>
+	
+	<a onclick="startGame();" href="#">start game</a>
 
 	<script>
 		var winnerId;
@@ -67,16 +69,15 @@ div {
 		var newGameResponse;
 		var gameId;
 		var playerId;
-		var teamId;
 		var timer;
 		var playing;
 
-		function getTeamColor(teamId) {
-			if (teamId == '0') {
+		function getPlayerColour(playerId) {
+			if (playerId == '0') {
 				return "#111";
 			}
 
-			if (teamId == '1') {
+			if (playerId == '1') {
 				return "#F00";
 			}
 
@@ -85,7 +86,7 @@ div {
 
 		function clickSlot(slot) {
 
-			if (currentId == teamId) {
+			if (currentId == playerId) {
 
 				makeRequestVoid("http://localhost:8080/multiplayer-server/SendMove?gameId="
 						+ gameId
@@ -114,23 +115,23 @@ div {
 			currentId = gameStatusResponse.getElementsByTagName("current")[0].innerHTML;
 			winnerId = gameStatusResponse.getElementsByTagName("winner")[0].innerHTML;
 
-			document.getElementById('00').style.backgroundColor = getTeamColor(gameTable
+			document.getElementById('00').style.backgroundColor = getPlayerColour(gameTable
 					.charAt(0));
-			document.getElementById('10').style.backgroundColor = getTeamColor(gameTable
+			document.getElementById('10').style.backgroundColor = getPlayerColour(gameTable
 					.charAt(1));
-			document.getElementById('20').style.backgroundColor = getTeamColor(gameTable
+			document.getElementById('20').style.backgroundColor = getPlayerColour(gameTable
 					.charAt(2));
-			document.getElementById('01').style.backgroundColor = getTeamColor(gameTable
+			document.getElementById('01').style.backgroundColor = getPlayerColour(gameTable
 					.charAt(3));
-			document.getElementById('11').style.backgroundColor = getTeamColor(gameTable
+			document.getElementById('11').style.backgroundColor = getPlayerColour(gameTable
 					.charAt(4));
-			document.getElementById('21').style.backgroundColor = getTeamColor(gameTable
+			document.getElementById('21').style.backgroundColor = getPlayerColour(gameTable
 					.charAt(5));
-			document.getElementById('02').style.backgroundColor = getTeamColor(gameTable
+			document.getElementById('02').style.backgroundColor = getPlayerColour(gameTable
 					.charAt(6));
-			document.getElementById('12').style.backgroundColor = getTeamColor(gameTable
+			document.getElementById('12').style.backgroundColor = getPlayerColour(gameTable
 					.charAt(7));
-			document.getElementById('22').style.backgroundColor = getTeamColor(gameTable
+			document.getElementById('22').style.backgroundColor = getPlayerColour(gameTable
 					.charAt(8));
 
 			document.getElementById('turnIdContainer').innerHTML = "Currently playing "
@@ -167,26 +168,29 @@ div {
 				return null;
 			}			
 		}
+		
+		function startGame() {
+			newGameResponse = makeRequest("http://localhost:8080/multiplayer-server/GetGameId?gameType=1");
+			gameId = (newGameResponse.getElementsByTagName("gameId")[0].innerHTML);
+			playerId = (newGameResponse.getElementsByTagName("playerId")[0].innerHTML);
+			
+			updateGameStatus(gameId);
+	
+			document.getElementById('gameIdContainer').innerHTML = "Game " + gameId;
+			document.getElementById('playerIdContainer').innerHTML = "Player "
+					+ playerId;
+			document.getElementById('turnIdContainer').innerHTML = "Currently playing "
+					+ currentId;
+	
+			playing = true;
+			timer = setInterval(function() {
+				if (playing) {
+	
+					updateGameStatus(gameId);
+				}
+			}, 1000);		
+		}
 
-		newGameResponse = makeRequest("http://localhost:8080/multiplayer-server/GetGameId?gameType=1");
-		gameId = (newGameResponse.getElementsByTagName("gameId")[0].innerHTML);
-		playerId = (newGameResponse.getElementsByTagName("playerId")[0].innerHTML);
-		teamId = (newGameResponse.getElementsByTagName("teamId")[0].innerHTML);
-		updateGameStatus(gameId);
-
-		document.getElementById('gameIdContainer').innerHTML = "Game " + gameId;
-		document.getElementById('playerIdContainer').innerHTML = "Player "
-				+ playerId;
-		document.getElementById('turnIdContainer').innerHTML = "Currently playing "
-				+ currentId;
-
-		playing = true;
-		timer = setInterval(function() {
-			if (playing) {
-
-				updateGameStatus(gameId);
-			}
-		}, 1000);
 	</script>
 </body>
 </html>
