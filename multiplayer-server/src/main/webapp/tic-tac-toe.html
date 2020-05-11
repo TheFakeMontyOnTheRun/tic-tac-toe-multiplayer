@@ -88,7 +88,7 @@ div {
 
 			if (currentId == playerId) {
 
-				makeRequestVoid("http://localhost:8080/multiplayer-server/SendMove?gameId="
+				makeRequestVoid("/multiplayer-server/SendMove?gameId="
 						+ gameId
 						+ "&playerId="
 						+ playerId
@@ -103,7 +103,7 @@ div {
 
 		function updateGameStatus(gameId) {
 
-			var gameStatusResponse = makeRequest("http://localhost:8080/multiplayer-server/GetGameStatus?gameId="
+			var gameStatusResponse = makeRequest("/multiplayer-server/GetGameStatus?gameId="
 					+ gameId);
 			
 			if ( gameStatusResponse == null ) {
@@ -152,8 +152,7 @@ div {
 		}
 
 		function makeRequest(url) {
-
-			var request = new XMLHttpRequest();
+			var request = new XMLHttpRequest();		
 			request.open("GET", url, false);
 			request.send();
 
@@ -170,7 +169,7 @@ div {
 		}
 		
 		function startGame() {
-			newGameResponse = makeRequest("http://localhost:8080/multiplayer-server/GetGameId?gameType=1");
+			newGameResponse = makeRequest("/multiplayer-server/GetGameId?gameType=1");
 			gameId = (newGameResponse.getElementsByTagName("gameId")[0].innerHTML);
 			playerId = (newGameResponse.getElementsByTagName("playerId")[0].innerHTML);
 			
