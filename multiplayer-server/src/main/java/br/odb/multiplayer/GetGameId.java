@@ -16,7 +16,7 @@ import br.odb.multiplayer.model.tictactoe.TicTacToeGame;
 /**
  * Servlet implementation class FindGame
  */
-
+@WebServlet(urlPatterns="/GetGameId")
 public class GetGameId extends HttpServlet {
 
 	class GameIdResponse {

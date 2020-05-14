@@ -3,6 +3,7 @@ package br.odb.multiplayer;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,6 +13,7 @@ import br.odb.multiplayer.model.ServerContext;
 /**
  * Servlet implementation class ResetServer
  */
+@WebServlet(urlPatterns="/ResetServer")
 public class ResetServer extends HttpServlet {
     /**
 	 * 

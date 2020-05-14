@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +17,7 @@ import br.odb.multiplayer.model.ServerContext;
 /**
  * Servlet implementation class SendMove
  */
+@WebServlet(urlPatterns="/SendMove")
 public class SendMove extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 

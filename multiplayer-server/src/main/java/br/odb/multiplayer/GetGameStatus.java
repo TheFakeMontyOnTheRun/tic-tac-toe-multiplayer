@@ -5,6 +5,7 @@ import java.io.OutputStream;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +16,7 @@ import br.odb.multiplayer.model.ServerContext;
 /**
  * Servlet implementation class CheckGameStatus
  */
+@WebServlet(urlPatterns="/GetGameStatus")
 public class GetGameStatus extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
