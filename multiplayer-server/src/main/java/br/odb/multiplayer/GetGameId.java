@@ -13,13 +13,13 @@ import br.odb.multiplayer.model.Game;
 import br.odb.multiplayer.model.ServerContext;
 import br.odb.multiplayer.model.tictactoe.TicTacToeGame;
 
-/**
- * Servlet implementation class FindGame
- */
-@WebServlet(urlPatterns="/GetGameId")
+@WebServlet(urlPatterns = "/GetGameId")
 public class GetGameId extends HttpServlet {
 
+	private static final long serialVersionUID = 4512362498041835138L;
+
 	class GameIdResponse {
+
 		private int gameId;
 		private int playerId;
 
@@ -38,26 +38,10 @@ public class GetGameId extends HttpServlet {
 		}
 	}
 
-	private static final long serialVersionUID = 1L;
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public GetGameId() {
-		super();
-	}
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		
-		System.out.println( "GET GAME ID!" );
-
-		ServerContext context = ServerContext
-				.createOrRetrieve((ServletContext) getServletContext());
+		ServerContext context = ServerContext.createOrRetrieve((ServletContext) getServletContext());
 
 		int playerId;
 		int gameType = Integer.parseInt(request.getParameter("gameType"));
@@ -78,11 +62,11 @@ public class GetGameId extends HttpServlet {
 		int bigger = 0;
 
 		Game toReturn;
+
 		// find a existing game pending for new players
 		for (Game g : context.games.values()) {
-			if (g.players.size() < g.getNumberOfRequiredPlayers()
-					&& !g.isTooOld()) {
-				System.out.println( "player joining game with id " + ( g.gameId ) );
+			if (g.players.size() < g.getNumberOfRequiredPlayers() && !g.isTooOld()) {
+				System.out.println("player joining game with id " + (g.gameId));
 				return g;
 			}
 
@@ -93,19 +77,14 @@ public class GetGameId extends HttpServlet {
 
 		toReturn = new TicTacToeGame(bigger + 1);
 
-		System.out.println( "created new game with id " + toReturn.gameId );
-		
+		System.out.println("created new game with id " + toReturn.gameId);
+
 		context.games.put(toReturn.gameId, toReturn);
 
 		return toReturn;
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 	}
 }

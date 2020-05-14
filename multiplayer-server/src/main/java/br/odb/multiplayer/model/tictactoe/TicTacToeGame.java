@@ -12,6 +12,7 @@ public class TicTacToeGame extends Game {
 	public final int[][] table = new int[3][];
 
 	public TicTacToeGame(int gameId) {
+
 		super(gameId, 1);
 
 		for (int c = 0; c < 3; ++c) {
@@ -44,7 +45,6 @@ public class TicTacToeGame extends Game {
 			winnerPlayerId = table[0][2];
 			return;
 		}
-
 	}
 
 	@Override
@@ -57,39 +57,37 @@ public class TicTacToeGame extends Game {
 		int playerId = Integer.parseInt(params.get("playerId"));
 
 		table[decodedY][decodedX] = playerId;
-		
+
 		setTheNextPlayerAsCurrent();
 	}
 
 	public void writeState(OutputStream os) {
-		
-		StringBuilder sb = new StringBuilder( "<?xml version='1.0'?><game><state>" );
-		
-		
+
+		StringBuilder sb = new StringBuilder("<?xml version='1.0'?><game><state>");
+
 		try {
 			for (int c = 0; c < 3; ++c) {
 				for (int d = 0; d < 3; ++d) {
 					sb.append(table[c][d]);
 				}
-			}			
-			
-			System.out.println( "writing status for " + currentPlayerId );
-			
-			Player p = players.get(currentPlayerId);
-			
-			if ( p != null ) {
-				sb.append( "</state><current>" );
-				sb.append(p.playerId);
-				sb.append( "</current><winner>" );
-				sb.append(winnerPlayerId);
-				sb.append( "</winner></game>" );
-			} else {
-				System.out.println( "current player is null!" );
 			}
 
-			os.write( sb.toString().getBytes() );
+			System.out.println("writing status for " + currentPlayerId);
+
+			Player p = players.get(currentPlayerId);
+
+			if (p != null) {
+				sb.append("</state><current>");
+				sb.append(p.playerId);
+				sb.append("</current><winner>");
+				sb.append(winnerPlayerId);
+				sb.append("</winner></game>");
+			} else {
+				System.out.println("current player is null!");
+			}
+
+			os.write(sb.toString().getBytes());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

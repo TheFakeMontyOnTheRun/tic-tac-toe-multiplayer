@@ -14,61 +14,40 @@ import javax.servlet.http.HttpServletResponse;
 import br.odb.multiplayer.model.Game;
 import br.odb.multiplayer.model.ServerContext;
 
-/**
- * Servlet implementation class SendMove
- */
-@WebServlet(urlPatterns="/SendMove")
+@WebServlet(urlPatterns = "/SendMove")
 public class SendMove extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public SendMove() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	private static final long serialVersionUID = 6138518555798154506L;
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-		ServerContext context = ServerContext
-				.createOrRetrieve((ServletContext) getServletContext());
-		
+		ServerContext context = ServerContext.createOrRetrieve((ServletContext) getServletContext());
+
 		String parameter = request.getParameter("gameId");
-		int gameId = Integer.parseInt( parameter );
-		Game g = context.games.get( gameId );
+		int gameId = Integer.parseInt(parameter);
+		Game g = context.games.get(gameId);
 
 		if (g.winnerPlayerId != 0) {
 			return;
 		}
 
 		Enumeration<String> parameterNames = request.getParameterNames();
-		HashMap< String, String > params = new HashMap< String, String >();
-		
+		HashMap<String, String> params = new HashMap<String, String>();
+
 		while (parameterNames.hasMoreElements()) {
 
 			String paramName = parameterNames.nextElement();
 			String paramValues = request.getParameter(paramName);
-			params.put( paramName, paramValues );
+			params.put(paramName, paramValues);
 		}
-		
+
 		g.lastMoveTime = System.currentTimeMillis();
-		g.sendMove( params );		
+		g.sendMove(params);
 		g.checkForGameEnd();
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 	}
-
 }

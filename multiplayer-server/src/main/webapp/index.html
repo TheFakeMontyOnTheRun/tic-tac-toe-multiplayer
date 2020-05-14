@@ -60,7 +60,7 @@ div {
 		<li id='playerIdContainer'></li>
 		<li id='turnIdContainer'></li>
 	</ul>
-	
+
 	<a onclick="startGame();" href="#">start game</a>
 
 	<script>
@@ -88,12 +88,9 @@ div {
 
 			if (currentId == playerId) {
 
-				makeRequestVoid("/multiplayer-server/SendMove?gameId="
-						+ gameId
-						+ "&playerId="
-						+ playerId
-						+ "&x="
-						+ slot.id.charAt(0) + "&y=" + slot.id.charAt(1));
+				makeRequestVoid("/multiplayer-server/SendMove?gameId=" + gameId
+						+ "&playerId=" + playerId + "&x=" + slot.id.charAt(0)
+						+ "&y=" + slot.id.charAt(1));
 			} else {
 				alert("Not your turn!");
 			}
@@ -105,8 +102,8 @@ div {
 
 			var gameStatusResponse = makeRequest("/multiplayer-server/GetGameStatus?gameId="
 					+ gameId);
-			
-			if ( gameStatusResponse == null ) {
+
+			if (gameStatusResponse == null) {
 				return;
 			}
 
@@ -152,44 +149,44 @@ div {
 		}
 
 		function makeRequest(url) {
-			var request = new XMLHttpRequest();		
+			var request = new XMLHttpRequest();
 			request.open("GET", url, false);
 			request.send();
 
-			if ( request.responseText ) {
-				
+			if (request.responseText) {
+
 				var parser = new DOMParser();
 				var xmlDoc = parser.parseFromString(request.responseText,
 						"text/xml");
-	
+
 				return xmlDoc;
 			} else {
 				return null;
-			}			
+			}
 		}
-		
+
 		function startGame() {
 			newGameResponse = makeRequest("/multiplayer-server/GetGameId?gameType=1");
 			gameId = (newGameResponse.getElementsByTagName("gameId")[0].innerHTML);
 			playerId = (newGameResponse.getElementsByTagName("playerId")[0].innerHTML);
-			
+
 			updateGameStatus(gameId);
-	
-			document.getElementById('gameIdContainer').innerHTML = "Game " + gameId;
+
+			document.getElementById('gameIdContainer').innerHTML = "Game "
+					+ gameId;
 			document.getElementById('playerIdContainer').innerHTML = "Player "
 					+ playerId;
 			document.getElementById('turnIdContainer').innerHTML = "Currently playing "
 					+ currentId;
-	
+
 			playing = true;
 			timer = setInterval(function() {
 				if (playing) {
-	
+
 					updateGameStatus(gameId);
 				}
-			}, 1000);		
+			}, 1000);
 		}
-
 	</script>
 </body>
 </html>
