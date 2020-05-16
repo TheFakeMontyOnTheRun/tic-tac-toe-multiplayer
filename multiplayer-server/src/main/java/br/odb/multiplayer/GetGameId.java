@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import br.odb.multiplayer.model.Game;
 import br.odb.multiplayer.model.ServerContext;
+import br.odb.multiplayer.model.rpg.RPGGame;
 import br.odb.multiplayer.model.tictactoe.TicTacToeGame;
 
 @WebServlet(urlPatterns = "/GetGameId")
@@ -65,7 +66,7 @@ public class GetGameId extends HttpServlet {
 
 		// find a existing game pending for new players
 		for (Game g : context.games.values()) {
-			if (g.players.size() < g.getNumberOfRequiredPlayers() && !g.isTooOld()) {
+			if ( g.getType() == gameType && g.players.size() < g.getNumberOfRequiredPlayers() && !g.isTooOld()) {
 				System.out.println("player joining game with id " + (g.gameId));
 				return g;
 			}
@@ -75,7 +76,15 @@ public class GetGameId extends HttpServlet {
 			}
 		}
 
-		toReturn = new TicTacToeGame(bigger + 1);
+		switch( gameType ) {
+			case 2:
+				toReturn = new RPGGame(bigger + 1);
+				break;
+			case 1:
+			default:
+			toReturn = new TicTacToeGame(bigger + 1);
+		}
+
 
 		System.out.println("created new game with id " + toReturn.gameId);
 

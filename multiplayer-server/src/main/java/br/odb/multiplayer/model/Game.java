@@ -10,13 +10,14 @@ public abstract class Game {
 	public final HashMap<Integer, Player> players = new HashMap<>();
 
 	public final int gameId;
+	public final int type;
 	public int winnerPlayerId;
 	public int currentPlayerId;
 	public long lastMoveTime;
 	public static final long TIME_LIMIT = 2 * 60 * 1000;
 
-	public Game(int gameId, int unused) {
-
+	public Game(int gameId, int type) {
+		this.type = type;
 		this.gameId = gameId;
 		this.winnerPlayerId = 0;
 		this.currentPlayerId = 0;
@@ -57,7 +58,13 @@ public abstract class Game {
 
 	public abstract int getNumberOfRequiredPlayers();
 
+	public abstract int getNumberOfMaximumPlayers();
+
 	public boolean isTooOld() {
 		return false;
+	}
+
+	public int getType() {
+		return type;
 	}
 }

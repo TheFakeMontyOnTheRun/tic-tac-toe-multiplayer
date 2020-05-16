@@ -96,4 +96,9 @@ public class TicTacToeGame extends Game {
 	public int getNumberOfRequiredPlayers() {
 		return 2;
 	}
+
+	@Override
+	public int getNumberOfMaximumPlayers() {
+		return 2;
+	}
 }
