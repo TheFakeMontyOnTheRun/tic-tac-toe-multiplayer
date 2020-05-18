@@ -22,11 +22,11 @@ public class SendMove extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		ServerContext context = ServerContext.createOrRetrieve((ServletContext) getServletContext());
-
-		String parameter = request.getParameter("gameId");
-		int gameId = Integer.parseInt(parameter);
-		Game g = context.games.get(gameId);
+		ServerContext context = ServerContext.createOrRetrieve((ServletContext) getServletContext());		
+		
+		String playerId = request.getParameter("playerId");
+		Game g = context.getGameForPlayerId(playerId);
+		
 
 		if (g.winnerPlayerId != 0) {
 			return;

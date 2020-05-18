@@ -29,11 +29,89 @@
 			<version>4.10</version>
 			<scope>test</scope>
 		</dependency>
-
+		
+		<dependency>
+			<groupId>br.odb</groupId>
+			<artifactId>gameworld</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build>
 		<finalName>multiplayer-server</finalName>
+		
+  <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>2.0.2</version>
+                    <configuration>
+                        <source>1.5</source>
+                        <target>1.5</target>
+                        <debug>true</debug>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>2.4</version>
+                    <configuration>
+                        <includeEmptyDirs>true</includeEmptyDirs>
+                        <webResources>
+                            <resource>
+                                <directory>ui</directory>
+                                <targetPath></targetPath>
+                                <includes>
+                                    <include>**</include>
+                                </includes>
+                            </resource>
+                            <resource>
+                                <directory>lib</directory>
+                                <targetPath>WEB-INF</targetPath>
+                                <includes>
+                                    <include>**/*.xml</include>
+                                    <include>**/log4j.properties</include>
+                                </includes>
+                            </resource>
+//edited below
+                            <resource>
+                               <directory>lib</directory>
+                               <targetPath>WEB_INF/lib</targetPath>
+                               <includes>
+                                    <include>**/*.jar</include>
+                               </includes>
+                            </resource>
+                        </webResources>
+                        <webXml>${project.basedir}/WEB-INF/web.xml</webXml>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>		
 	</build>
 
 	<properties>

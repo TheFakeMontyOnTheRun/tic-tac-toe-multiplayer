@@ -24,10 +24,11 @@ public class GetGameStatus extends HttpServlet {
 		ServerContext context = ServerContext.createOrRetrieve((ServletContext) getServletContext());
 
 		OutputStream os = response.getOutputStream();
-		Game g = context.games.get(Integer.parseInt(request.getParameter("gameId")));
+		String playerId = request.getParameter("playerId");
+		Game g = context.getGameForPlayerId(playerId);
 
 		if (g != null) {
-			g.writeState(os);
+			g.writeState(playerId, os);
 		} else {
 			System.out.println("game is null!");
 		}

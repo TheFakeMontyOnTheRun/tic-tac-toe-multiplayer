@@ -50,6 +50,8 @@ public class GetGameId extends HttpServlet {
 		Game g = getGameNewOrVacantGame(context, gameType);
 
 		playerId = g.addNewPlayer();
+		
+		context.registerPlayerForGame( playerId, g);
 
 		gis.gameId = g.gameId;
 		gis.playerId = playerId;

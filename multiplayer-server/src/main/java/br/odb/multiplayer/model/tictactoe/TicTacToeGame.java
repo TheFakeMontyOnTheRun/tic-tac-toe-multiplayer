@@ -61,7 +61,7 @@ public class TicTacToeGame extends Game {
 		setTheNextPlayerAsCurrent();
 	}
 
-	public void writeState(OutputStream os) {
+	public void writeState(String playerId, OutputStream os) {
 
 		StringBuilder sb = new StringBuilder("<?xml version='1.0'?><game><state>");
 

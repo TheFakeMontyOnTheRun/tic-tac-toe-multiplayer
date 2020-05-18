@@ -46,7 +46,6 @@ public abstract class Game {
 	public Player makeNewPlayer() {
 
 		System.out.println("creating a new player");
-
 		return new Player(players.size() + 1, gameId);
 	}
 
@@ -54,7 +53,7 @@ public abstract class Game {
 
 	public abstract void sendMove(HashMap<String, String> params);
 
-	public abstract void writeState(OutputStream os);
+	public abstract void writeState(String playerId, OutputStream os);
 
 	public abstract int getNumberOfRequiredPlayers();
 

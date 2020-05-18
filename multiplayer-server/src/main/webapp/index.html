@@ -100,8 +100,8 @@ div {
 
 		function updateGameStatus(gameId) {
 
-			var gameStatusResponse = makeRequest("/multiplayer-server/GetGameStatus?gameId="
-					+ gameId);
+			var gameStatusResponse = makeRequest("/multiplayer-server/GetGameStatus?playerId="
+					+ playerId);
 
 			if (gameStatusResponse == null) {
 				return;
