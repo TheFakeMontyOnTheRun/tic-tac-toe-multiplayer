@@ -57,7 +57,6 @@
                     <artifactId>maven-war-plugin</artifactId>
                     <version>2.4</version>
                     <configuration>
-                        <includeEmptyDirs>true</includeEmptyDirs>
                         <webResources>
                             <resource>
                                 <directory>ui</directory>

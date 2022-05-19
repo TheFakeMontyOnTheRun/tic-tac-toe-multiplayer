@@ -1,15 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
-	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
-	id="WebApp_ID" version="3.1">
-	<display-name>Multiplayer</display-name>
-	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
-		<welcome-file>index.htm</welcome-file>
-		<welcome-file>index.jsp</welcome-file>
-		<welcome-file>default.html</welcome-file>
-		<welcome-file>default.htm</welcome-file>
-		<welcome-file>default.jsp</welcome-file>
-	</welcome-file-list>
+         xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         id="WebApp_ID" version="3.1">
+    <display-name>Multiplayer</display-name>
+
+
+    <!-- ================= -->
+    <servlet>
+        <servlet-name>GetGameId</servlet-name>
+        <display-name>GetGameId</display-name>
+        <description></description>
+        <servlet-class>br.odb.multiplayer.GetGameId</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>
+            GetGameId
+        </servlet-name>
+        <url-pattern>
+            /GetGameId
+        </url-pattern>
+    </servlet-mapping>
+    <!-- ================= -->
+
+    <servlet>
+        <servlet-name>GetGameStatus</servlet-name>
+        <servlet-class>
+            br.odb.multiplayer.GetGameStatus
+        </servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>
+            GetGameStatus
+        </servlet-name>
+        <url-pattern>
+            /GetGameStatus
+        </url-pattern>
+    </servlet-mapping>
+    <!-- ================= -->
+    <servlet>
+        <servlet-name>ResetServer</servlet-name>
+        <servlet-class>
+            br.odb.multiplayer.ResetServer
+        </servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>
+            ResetServer
+        </servlet-name>
+        <url-pattern>
+            /ResetServer
+        </url-pattern>
+    </servlet-mapping>
+
+    <!-- ================= -->
+    <servlet>
+        <servlet-name>SendMove</servlet-name>
+        <servlet-class>
+            br.odb.multiplayer.SendMove
+        </servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>
+            SendMove
+        </servlet-name>
+        <url-pattern>
+            /SendMove
+        </url-pattern>
+    </servlet-mapping>
+    <!-- ================= -->
+
+
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.htm</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>default.html</welcome-file>
+        <welcome-file>default.htm</welcome-file>
+        <welcome-file>default.jsp</welcome-file>
+    </welcome-file-list>
 </web-app>
